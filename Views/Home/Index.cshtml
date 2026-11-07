@@ -1,0 +1,223 @@
+﻿@{
+    ViewData["Title"] = "Farmer Dashboard";
+    var username = ViewBag.Username ?? "Farmer";
+}
+
+<style>
+    body {
+        background: #f4f8f4;
+    }
+
+    .dashboard {
+        padding: 25px 10px;
+    }
+
+    .welcome-banner {
+        background: linear-gradient(120deg, #14532d, #23834c);
+        color: white;
+        padding: 35px;
+        border-radius: 18px;
+        margin-bottom: 30px;
+    }
+
+        .welcome-banner h2 {
+            font-weight: 700;
+        }
+
+    .sensor-card {
+        background: white;
+        border: none;
+        border-radius: 16px;
+        padding: 24px;
+        height: 100%;
+        box-shadow: 0 3px 15px rgba(0,0,0,0.05);
+        transition: transform .2s;
+    }
+
+        .sensor-card:hover {
+            transform: translateY(-4px);
+        }
+
+    .sensor-icon {
+        font-size: 28px;
+        margin-bottom: 15px;
+    }
+
+    .sensor-value {
+        font-size: 30px;
+        font-weight: 700;
+        color: #14532d;
+    }
+
+    .section-title {
+        font-weight: 700;
+        color: #173b26;
+        margin-bottom: 20px;
+    }
+
+    .status-badge {
+        background: #dcfce7;
+        color: #166534;
+        padding: 7px 13px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 600;
+    }
+
+    .dashboard-panel {
+        background: white;
+        padding: 25px;
+        border-radius: 16px;
+        box-shadow: 0 3px 15px rgba(0,0,0,0.04);
+    }
+</style>
+
+<div class="container-fluid dashboard">
+
+    <!-- Welcome Banner -->
+    <div class="welcome-banner">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+            <div>
+                <span class="badge bg-light text-success mb-3">
+                    AGRISTREAM IOT
+                </span>
+
+                <h2>Welcome back, @username! 🌱</h2>
+
+                <p class="mb-0">
+                    Monitor your farm and manage agricultural conditions
+                    from your personal dashboard.
+                </p>
+            </div>
+
+            <div>
+                <span class="status-badge">
+                    ● Farmer Account
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sensor Overview -->
+    <h4 class="section-title">Farm Monitoring Overview</h4>
+
+    <div class="row g-4 mb-4">
+
+        <div class="col-md-6 col-lg-3">
+            <div class="sensor-card">
+                <div class="sensor-icon">🌡️</div>
+                <h6 class="text-muted">Temperature</h6>
+                <div class="sensor-value">24°C</div>
+                <small class="text-success">Sample reading</small>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-lg-3">
+            <div class="sensor-card">
+                <div class="sensor-icon">💧</div>
+                <h6 class="text-muted">Humidity</h6>
+                <div class="sensor-value">65%</div>
+                <small class="text-success">Sample reading</small>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-lg-3">
+            <div class="sensor-card">
+                <div class="sensor-icon">🌱</div>
+                <h6 class="text-muted">Soil Moisture</h6>
+                <div class="sensor-value">48%</div>
+                <small class="text-success">Sample reading</small>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-lg-3">
+            <div class="sensor-card">
+                <div class="sensor-icon">🚿</div>
+                <h6 class="text-muted">Irrigation</h6>
+                <div class="sensor-value" style="font-size:23px;">
+                    Standby
+                </div>
+                <small class="text-muted">Demo status</small>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Farm Status -->
+    <div class="row g-4">
+
+        <div class="col-lg-7">
+            <div class="dashboard-panel h-100">
+                <h5 class="section-title">Farm Overview</h5>
+
+                <p class="text-muted">
+                    Your agricultural monitoring dashboard brings
+                    together environmental information to help you
+                    make better farming decisions.
+                </p>
+
+                <hr />
+
+                <div class="d-flex justify-content-between mb-3">
+                    <span>Account username</span>
+                    <strong>@username</strong>
+                </div>
+
+                <div class="d-flex justify-content-between mb-3">
+                    <span>Account role</span>
+                    <strong>Farmer</strong>
+                </div>
+
+                <div class="d-flex justify-content-between">
+                    <span>Monitoring system</span>
+                    <strong class="text-success">AgriStreamIoT</strong>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-5">
+            <div class="dashboard-panel h-100">
+                <h5 class="section-title">System Information</h5>
+
+                <div class="mb-3">
+                    <span class="status-badge">Demo dashboard</span>
+                </div>
+
+                <p class="text-muted">
+                    Sensor readings currently displayed are sample
+                    values. Live IoT readings will be integrated
+                    in the next development stage.
+                </p>
+
+                <hr />
+
+                <div class="d-flex justify-content-between">
+                    <span>Environmental monitoring</span>
+                    <strong class="text-success">Planned</strong>
+                </div>
+
+                <div class="d-flex justify-content-between mt-3">
+                    <span>Live sensor connection</span>
+                    <strong class="text-warning">Pending</strong>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Logout -->
+    <div class="d-flex justify-content-end mt-4">
+        <form asp-controller="Account"
+              asp-action="Logout"
+              method="post">
+
+            @Html.AntiForgeryToken()
+
+            <button type="submit" class="btn btn-outline-danger">
+                <i class="bi bi-box-arrow-right"></i>
+                Logout
+            </button>
+        </form>
+    </div>
+
+</div>

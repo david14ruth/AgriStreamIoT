@@ -1,0 +1,137 @@
+﻿@{
+    ViewData["Title"] = "Create Account";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .register-wrapper {
+        min-height: 75vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 40px 15px;
+        background: #f4f8f4;
+    }
+
+    .register-card {
+        width: 100%;
+        max-width: 480px;
+        background: white;
+        padding: 40px;
+        border-radius: 18px;
+        box-shadow: 0 10px 35px rgba(0,0,0,.08);
+    }
+
+    .register-icon {
+        width: 65px;
+        height: 65px;
+        border-radius: 18px;
+        background: #e5f3e9;
+        color: #176b45;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 32px;
+        margin: 0 auto 18px;
+    }
+
+    .register-card h2 {
+        color: #174d35;
+        font-weight: 700;
+        text-align: center;
+    }
+
+    .register-subtitle {
+        color: #718078;
+        text-align: center;
+        margin-bottom: 28px;
+    }
+
+    .form-label {
+        color: #344b3d;
+        font-weight: 600;
+    }
+
+    .form-control {
+        padding: 12px;
+        border-radius: 9px;
+    }
+
+    .register-btn {
+        background: #176b45;
+        color: white;
+        border: none;
+        padding: 13px;
+        border-radius: 9px;
+        font-weight: 600;
+        width: 100%;
+        margin-top: 12px;
+    }
+
+        .register-btn:hover {
+            background: #105335;
+            color: white;
+        }
+
+    @@media (max-width: 576px) {
+        .register-card {
+            padding: 28px 22px;
+        }
+    }
+</style>
+
+<div class="register-wrapper">
+    <div class="register-card">
+
+        <div class="register-icon">🌱</div>
+
+        <h2>Create Your Account</h2>
+        <p class="register-subtitle">
+            Join AgriStreamIoT and manage your farming activities.
+        </p>
+
+        @if (ViewBag.Error != null)
+        {
+            <div class="alert alert-danger">
+                @ViewBag.Error
+            </div>
+        }
+
+        <form asp-controller="Account" asp-action="Register" method="post">
+            @Html.AntiForgeryToken()
+
+            <div class="mb-3">
+                <label class="form-label">Username</label>
+                <input type="text"
+                       name="username"
+                       class="form-control"
+                       placeholder="Choose a username"
+                       required />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Password</label>
+                <input type="password"
+                       name="password"
+                       class="form-control"
+                       placeholder="At least 8 characters"
+                       minlength="8"
+                       required />
+            </div>
+
+            <button type="submit" class="register-btn">
+                Create Account
+            </button>
+        </form>
+
+        <p class="text-center mt-4 mb-0">
+            Already have an account?
+            <a asp-controller="Account"
+               asp-action="Login"
+               style="color:#176b45;font-weight:600;">
+                Sign in
+            </a>
+        </p>
+
+    </div>
+</div>

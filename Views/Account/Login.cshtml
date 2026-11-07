@@ -1,0 +1,235 @@
+﻿@{
+    ViewData["Title"] = "Farmer Login";
+}
+AgriStreamIoT
+Welcome back, Farmer!
+
+@{
+    ViewData["Title"] = "Farmer Login";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .login-wrapper {
+        min-height: 80vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 40px 15px;
+        background: #f3f7f2;
+    }
+
+    .login-card {
+        width: 100%;
+        max-width: 950px;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        background: white;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 12px 40px rgba(0,0,0,0.08);
+    }
+
+    .login-left {
+        background: linear-gradient(145deg, #145c35, #24834d);
+        color: white;
+        padding: 55px 40px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+        .login-left h1 {
+            font-size: 32px;
+            font-weight: 800;
+            margin-bottom: 18px;
+        }
+
+        .login-left p {
+            color: #e2f1e6;
+            line-height: 1.8;
+        }
+
+    .login-icon {
+        font-size: 65px;
+        margin-bottom: 25px;
+    }
+
+    .login-right {
+        padding: 55px 45px;
+    }
+
+        .login-right h2 {
+            color: #174f32;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+    .login-subtitle {
+        color: #777;
+        margin-bottom: 30px;
+    }
+
+    .form-label {
+        font-weight: 600;
+        color: #333;
+    }
+
+    .login-input {
+        border: 1px solid #dce5dd;
+        border-radius: 10px;
+        padding: 13px 15px;
+        height: 50px;
+    }
+
+        .login-input:focus {
+            border-color: #24834d;
+            box-shadow: 0 0 0 3px rgba(36,131,77,0.12);
+        }
+
+    .login-btn {
+        background: #19834a;
+        color: white;
+        border: none;
+        border-radius: 10px;
+        padding: 14px;
+        font-weight: 700;
+        width: 100%;
+        transition: 0.2s;
+    }
+
+        .login-btn:hover {
+            background: #126638;
+            color: white;
+        }
+
+    .register-link {
+        color: #19834a;
+        font-weight: 700;
+        text-decoration: none;
+    }
+
+        .register-link:hover {
+            text-decoration: underline;
+        }
+
+    @@media (max-width: 700px) {
+        .login-card {
+            grid-template-columns: 1fr;
+        }
+
+        .login-left {
+            padding: 30px;
+        }
+
+            .login-left h1 {
+                font-size: 25px;
+            }
+
+        .login-icon {
+            font-size: 45px;
+            margin-bottom: 10px;
+        }
+
+        .login-right {
+            padding: 35px 25px;
+        }
+    }
+</style>
+
+<div class="login-wrapper">
+    <div class="login-card">
+
+        <!-- Left branding section -->
+        <div class="login-left">
+            <div class="login-icon">🌱</div>
+
+            <h1>AgriStreamIoT</h1>
+
+            <h5 class="mb-3">Smart Farming. Better Future.</h5>
+
+            <p>
+                Welcome to AgriStreamIoT, your smart agricultural
+                management platform. Access your farming dashboard,
+                monitor activities and manage your agricultural
+                operations in one place.
+            </p>
+
+            <div class="mt-4">
+                <small>Growing smarter, together.</small>
+            </div>
+        </div>
+
+        <!-- Right login section -->
+        <div class="login-right">
+
+            <h2>Welcome Back!</h2>
+
+            <p class="login-subtitle">
+                Sign in to access your farmer account.
+            </p>
+
+            @if (TempData["Success"] != null)
+            {
+                <div class="alert alert-success rounded-3">
+                    @TempData["Success"]
+                </div>
+            }
+
+            @if (ViewBag.Error != null)
+            {
+                <div class="alert alert-danger rounded-3">
+                    @ViewBag.Error
+                </div>
+            }
+
+            <form asp-controller="Account"
+                  asp-action="Login"
+                  method="post">
+
+                @Html.AntiForgeryToken()
+
+                <div class="mb-4">
+                    <label class="form-label">Username</label>
+
+                    <input type="text"
+                           name="username"
+                           class="form-control login-input"
+                           placeholder="Enter your username"
+                           autocomplete="username"
+                           required />
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label">Password</label>
+
+                    <input type="password"
+                           name="password"
+                           class="form-control login-input"
+                           placeholder="Enter your password"
+                           autocomplete="current-password"
+                           required />
+                </div>
+
+                <button type="submit" class="login-btn">
+                    Sign In →
+                </button>
+
+            </form>
+
+            <div class="text-center mt-4">
+                <span class="text-muted">
+                    Don't have an account?
+                </span>
+
+                <a asp-controller="Account"
+                   asp-action="Register"
+                   class="register-link">
+                    Register here
+                </a>
+            </div>
+
+        </div>
+    </div>
+</div>
+r
