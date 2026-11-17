@@ -1,8 +1,8 @@
 
 using AgriStreamIoT.Data;
 using AgriStreamIoT.Services;
+using Azure.Storage.Blobs;
 using Microsoft.EntityFrameworkCore;
-using AgriStreamIoT.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddSingleton<AzureStorageService>();
@@ -28,6 +28,14 @@ builder.Services.AddSession(options =>
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
 });
+builder.Services.AddSingleton(x =>
+    new BlobServiceClient(
+        builder.Configuration["AzureStorage"]));
+
+builder.Services.AddScoped<BlobStorageService>();
+builder.Services.AddSingleton(sp =>
+    new TableStorageService(
+        builder.Configuration["AzureStorage"]!));
 
 var app = builder.Build();
 using (var scope = app.Services.CreateScope())
