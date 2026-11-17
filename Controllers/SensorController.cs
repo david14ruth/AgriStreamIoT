@@ -3,6 +3,7 @@ using AgriStreamIoT.Data;
 using AgriStreamIoT.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using AgriStreamIoT.Services;
 
 namespace AgriStreamIoT.Controllers
 {
@@ -11,10 +12,14 @@ namespace AgriStreamIoT.Controllers
     public class SensorController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
+        private readonly TableStorageService _tableStorageService;
 
-        public SensorController(ApplicationDbContext context)
+        public SensorController(
+            ApplicationDbContext context,
+            TableStorageService tableStorageService)
         {
             _context = context;
+            _tableStorageService = tableStorageService;
         }
 
         // GET: api/sensor
@@ -41,19 +46,25 @@ namespace AgriStreamIoT.Controllers
         }
 
         // POST: api/sensor
+
         [HttpPost]
         public async Task<IActionResult> AddReading(
             [FromBody] SensorReading reading)
         {
             reading.RecordedAt = DateTime.UtcNow;
 
+            // Save reading to Azure SQL Database
             _context.SensorReadings.Add(reading);
             await _context.SaveChangesAsync();
+
+            // Save reading to Azure Table Storage
+            await _tableStorageService.SaveSensorReadingAsync(reading);
 
             return CreatedAtAction(
                 nameof(GetReading),
                 new { id = reading.Id },
                 reading);
         }
+
     }
 }

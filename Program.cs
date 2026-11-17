@@ -3,6 +3,7 @@ using AgriStreamIoT.Data;
 using AgriStreamIoT.Services;
 using Azure.Storage.Blobs;
 using Microsoft.EntityFrameworkCore;
+using System.Numerics;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddSingleton<AzureStorageService>();
@@ -33,19 +34,52 @@ builder.Services.AddSingleton(x =>
         builder.Configuration["AzureStorage"]));
 
 builder.Services.AddScoped<BlobStorageService>();
+
 builder.Services.AddSingleton(sp =>
     new TableStorageService(
         builder.Configuration["AzureStorage"]!));
 
+builder.Services.AddSingleton(sp =>
+    new QueueStorageService(
+        builder.Configuration["AzureStorage"]!));
+
 var app = builder.Build();
+
 using (var scope = app.Services.CreateScope())
 {
-    var storageService = scope.ServiceProvider
-        .GetRequiredService<AzureStorageService>();
+    var services = scope.ServiceProvider;
+
+    var storageService =
+        services.GetRequiredService<AzureStorageService>();
 
     await storageService.InitializeStorageAsync();
-}
 
+    var tableStorage =
+        services.GetRequiredService<TableStorageService>();
+
+    await tableStorage.InitializeAsync();
+
+    var queueStorage =
+        services.GetRequiredService<QueueStorageService>();
+
+    await queueStorage.InitializeAsync();
+}
+/*```
+
+This ensures the tables and queue exist when the application starts.
+
+## Step 6.3 – Test the application
+
+1. Save all files.
+2. Press `Ctrl + Shift + B`.
+3. If successful, run the application.
+
+<badge color="success">Expected result</badge> The application should start and initialize the Azure Storage resources.
+
+**One important thing before we continue:**Please send me your existing `SensorController.cs` code next.
+
+We'll integrate Azure Table Storage into the existing sensor submission functionality without breaking the SQL Server functionality we've already implemented.
+*/
 // Enable Swagger in Development
 if (app.Environment.IsDevelopment())
 {

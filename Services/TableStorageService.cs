@@ -10,16 +10,21 @@ namespace AgriStreamIoT.Services
         private readonly TableClient _telemetryTable;
         private readonly TableClient _irrigationAuditTable;
 
+
         public TableStorageService(string connectionString)
         {
             var serviceClient = new TableServiceClient(connectionString);
 
             _telemetryTable = serviceClient.GetTableClient("AgriTelemetry");
             _irrigationAuditTable = serviceClient.GetTableClient("IrrigationAudit");
-
-            _telemetryTable.CreateIfNotExists();
-            _irrigationAuditTable.CreateIfNotExists();
         }
+
+        public async Task InitializeAsync()
+        {
+            await _telemetryTable.CreateIfNotExistsAsync();
+            await _irrigationAuditTable.CreateIfNotExistsAsync();
+        }
+
 
         // Save sensor reading
 
@@ -54,6 +59,7 @@ namespace AgriStreamIoT.Services
         }
 
         // Save irrigation command audit
+
         public async Task SaveIrrigationAuditAsync(IrrigationCommand command)
         {
             var entity = new TableEntity(
@@ -63,11 +69,12 @@ namespace AgriStreamIoT.Services
                 ["DeviceId"] = command.DeviceId,
                 ["Command"] = command.Command,
                 ["Status"] = command.Status,
-                ["RecordedAt"] = DateTime.UtcNow
+                ["CreatedAt"] = command.CreatedAt
             };
 
             await _irrigationAuditTable.AddEntityAsync(entity);
         }
+
 
         // Retrieve irrigation audit records
         public async Task<List<TableEntity>> GetIrrigationAuditsAsync()
